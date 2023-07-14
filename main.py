@@ -1,4 +1,5 @@
 import secrets
+import vertexai
 
 from crypt import methods
 from flask import Flask, render_template, redirect, url_for
@@ -7,6 +8,7 @@ from flask_wtf import FlaskForm, CSRFProtect
 from modules import get_text_embeddings, get_response, publish_pubsub
 from random import choices
 from secrets import choice
+from vertexai.preview.language_models import TextGenerationModel, TextEmbeddingModel
 from wsgiref import validate
 from wtforms import SubmitField, TextAreaField
 from wtforms.validators import DataRequired
