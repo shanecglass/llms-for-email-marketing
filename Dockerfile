@@ -5,11 +5,13 @@ RUN apt-get update
 RUN apt-get -y install git
 
 # Copy local code to the container image.
-# RUN mkdir ./templates
+RUN mkdir ./app
+WORKDIR /home/ubuntudocker/app
+
 COPY main.py .
 COPY modules.py .
 COPY requirements.txt .
-COPY templates .
+COPY ./templates /home/ubuntudocker/app/templates
 
 
 # Install dependencies into this container so there's no need to
