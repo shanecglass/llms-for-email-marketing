@@ -9,10 +9,10 @@ RUN mkdir ./templates
 COPY main.py .
 COPY modules.py .
 COPY requirements.txt .
-COPY templates/index.html ./templates
-COPY templates/review.html ./templates
-COPY templates/404.html ./templates
-COPY templates/500.html ./templates
+COPY templates/index.html ./templates/index.html
+COPY templates/review.html ./templates/review.html
+COPY templates/404.html ./templates/404.html
+COPY templates/500.html ./templates/500.html
 
 
 # Install dependencies into this container so there's no need to
