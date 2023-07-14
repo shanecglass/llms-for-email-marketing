@@ -3,7 +3,7 @@ import vertexai
 
 from crypt import methods
 from flask import Flask, render_template, redirect, url_for
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap5
 from flask_wtf import FlaskForm, CSRFProtect
 from modules import get_text_embeddings, get_response, publish_pubsub
 from random import choices
@@ -13,10 +13,10 @@ from wsgiref import validate
 from wtforms import SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
-app = Flask (__name__, template_folder='templates')
+app = Flask (__name__)
 foo = secrets.token_urlsafe(16)
 app.secret_key = foo
-bootstrap = Bootstrap(app)
+bootstrap = Bootstrap5(app)
 csrf = CSRFProtect(app)
 
 temperature = 0.9
