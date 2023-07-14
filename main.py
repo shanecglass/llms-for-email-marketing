@@ -53,7 +53,7 @@ def index():
       return redirect( url_for('/review.html'), form=form, response=output_text)
   else:
       message = "Invalid inputs. Try again"
-  return render_template('index.html', form=form, message=message)
+      return render_template('index.html', form=form, message=message)
 
 @app.route('/review')
 def output(response):
