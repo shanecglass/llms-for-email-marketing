@@ -16,7 +16,7 @@ from wtforms.validators import DataRequired
 app = Flask (__name__, template_folder='.')
 foo = secrets.token_urlsafe(16)
 app.secret_key = foo
-Bootstrap(app)
+bootstrap = Bootstrap(app)
 csrf = CSRFProtect(app)
 
 temperature = 0.9
