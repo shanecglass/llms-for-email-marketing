@@ -12,6 +12,9 @@ project_id = "scg-test-and-dev"
 location = "us-central1"
 pubsub_topic_id = "email_marketing_llm"
 
+publisher = pubsub_v1.PublisherClient()
+topic_path = publisher.topic_path(project_id, pubsub_topic_id)
+
 vertexai.init(project=project_id, location=location)
 
 def get_text_embeddings(input):
@@ -26,10 +29,10 @@ def get_text_embeddings(input):
 def get_response(input_prompt):
   model = TextGenerationModel.from_pretrained("text-bison@001")
   parameters = {
-        "temperature": 0.9,  # Temperature controls the degree of randomness in token selection.
-        "max_output_tokens": 512,  # Token limit determines the maximum amount of text output.
-        "top_p": 0.8,  # Tokens are selected from most probable to least until the sum of their probabilities equals the top_p value.
-        "top_k": 40,  # A top_k of 1 means the selected token is the most probable among all tokens.
+    "temperature": 0.9,  # Temperature controls the degree of randomness in token selection.
+    "max_output_tokens": 512,  # Token limit determines the maximum amount of text output.
+    "top_p": 0.8,  # Tokens are selected from most probable to least until the sum of their probabilities equals the top_p value.
+    "top_k": 40,  # A top_k of 1 means the selected token is the most probable among all tokens.
   }
 
   output = model.predict(
@@ -37,11 +40,7 @@ def get_response(input_prompt):
     **parameters
   )
   print(output.text)
-  candidates = json.dumps(output._prediction_response)
-  return candidates
-
-publisher = pubsub_v1.PublisherClient()
-topic_path = publisher.topic_path(project_id, pubsub_topic_id)
+  return output
 
 def publish_pubsub(text, embedding):
   #"""Text embedding with a Large Language Model."""

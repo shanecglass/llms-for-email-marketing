@@ -1,5 +1,5 @@
 # Use an official lightweight Python image.
-FROM python:3.9-slim
+FROM python:3.10.7-slim
 
 RUN apt-get update
 RUN apt-get -y install git
