@@ -13,7 +13,7 @@ from wsgiref import validate
 from wtforms import SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
-app = Flask (__name__, template_folder="templates")
+app = Flask (__name__)
 foo = secrets.token_urlsafe(16)
 app.secret_key = foo
 bootstrap = Bootstrap5(app)
