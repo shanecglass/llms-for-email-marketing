@@ -1,0 +1,11 @@
+PROJ=$(gcloud config get-value project)
+REGION=us-central1
+IMG_TAG="gcr.io/$PROJ/data-studio-form"
+
+gcloud run deploy "data-studio-form-app"  \
+    --project "$PROJ"     \
+    --image "$IMG_TAG"    \
+    --platform "managed"  \
+    --port 5000           \
+    --region "$REGION"    \
+    --allow-unauthenticated
