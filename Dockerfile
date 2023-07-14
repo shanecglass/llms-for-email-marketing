@@ -8,11 +8,12 @@ RUN apt-get -y install git
 RUN mkdir ./templates
 COPY main.py .
 COPY modules.py .
+COPY requirements.txt .
 COPY templates/index.html ./templates
 COPY templates/review.html ./templates
 COPY templates/404.html ./templates
 COPY templates/500.html ./templates
-COPY requirements.txt ./templates
+
 
 # Install dependencies into this container so there's no need to
 # install anything at container run time.
