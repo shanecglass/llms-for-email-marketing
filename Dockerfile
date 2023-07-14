@@ -7,10 +7,10 @@ RUN apt-get -y install git
 # Copy local code to the container image.
 COPY main.py .
 COPY modules.py .
-COPY index.html .
-COPY review.html .
-COPY 404.html .
-COPY 500.html .
+COPY templates/index.html .
+COPY templates/review.html .
+COPY templates/404.html .
+COPY templates/500.html .
 COPY requirements.txt .
 
 # Install dependencies into this container so there's no need to
