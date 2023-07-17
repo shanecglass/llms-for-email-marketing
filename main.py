@@ -56,7 +56,7 @@ def index():
       return render_template('index.html', form=form, message=message)
 
 @app.route('/review')
-def output(response):
+def review(response):
   if response is not None:
     return render_template('review.html', response=response)
   else:
