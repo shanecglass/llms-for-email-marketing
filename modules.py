@@ -50,7 +50,7 @@ def get_response(input_prompt):
 def publish_pubsub(session, text, text_embedding, purpose):
   if purpose == "prompt":
     text_embedding = json.dumps(text_embedding)
-    dict = {"session_id": session, "prompt": text, "embedding": text_embedding}
+    dict = {"session_id": session, "prompt": text, "embedding": text_embedding[0]}
     data_string = json.dumps(dict)
     data = data_string.encode("utf-8")
     future = publisher.publish(prompt_topic_path, data)
