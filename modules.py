@@ -8,7 +8,7 @@ from google.cloud import pubsub_v1
 from typing import Callable
 from vertexai.preview.language_models import TextGenerationModel, TextEmbeddingModel
 
-project_id = "scg-test-and-dev"
+project_id = "building-on-bq-demos"
 location = "us-central1"
 pubsub_topic_id = "email_marketing_llm"
 
