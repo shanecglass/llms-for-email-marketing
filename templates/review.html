@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Selected Actor: {{ name }}
+You've got mail!
 {% endblock %}
 
 
@@ -13,7 +13,7 @@ Selected Actor: {{ name }}
 
       <!-- note, the id is not used in the template -->
 
-      <h1 class="pt-5 pb-2">Here's your email:</h1>
+      <h1 class="pt-5 pb-2">You've got mail!</h1>
 
       <p><a href="{{ url_for('index') }}">Return to search page</a></p>
 
@@ -22,9 +22,14 @@ Selected Actor: {{ name }}
 	      Flask - it needs to name the FUNCTION, not the route
       -->
 
-      <p>Here's the response we came up with based on your prompt. Take a look.</p>
+      <p>Here's what we came up with based on your input. Take a look:</p>
 
-      <p>"{{ response }}"</p>
+      <div class="row">
+      <p><b>Subject:</b>"{{ email_subject }}"</p>
+      </div>
+      <div class="row">
+      <p><b>Body:</b>"{{ email_body }}"</p>
+      </div>
     </div>
   </div>
 </div>

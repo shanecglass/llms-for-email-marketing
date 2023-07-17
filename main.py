@@ -1,5 +1,6 @@
 import secrets
-import vertexai
+import requests
+
 
 from crypt import methods
 from flask import Flask, render_template, redirect, url_for
@@ -35,33 +36,38 @@ def index():
   form = initialInputs()
   message = ""
   if form.validate_on_submit():
-      prompt_tone = form.prompt_tone.data.replace('"', '\"').replace("'", "\'")
-      prompt_purpose = form.prompt_purpose.data.replace('"', '\"').replace("'", "\'")
-      prompt_notes = form.prompt_notes.data.replace('"', '\"').replace("'", "\'")
-      input_prompt = f"""
-        Write the body of a marketing email from Cymbal Retail that will {prompt_purpose}.
-        The subject of the email should start with \'Subject:\' and the body of the email should start with \'Body:\'.
-        Write it in the tone of {prompt_tone}.
-        Make sure to incude {prompt_notes}
-        """
-      prompt_embed = get_text_embeddings(input_prompt)
-      #publish_pubsub(input_prompt, prompt_embed)
-      output = get_response(input_prompt)
-      output_text = output.text
-      response_embed = get_text_embeddings(output_text)
-      #publish_pubsub(output._prediction_response, response_embed)
-      message=""
-      return redirect( url_for('review.html'), response=output_text)
+    prompt_tone = form.prompt_tone.data.replace('"', '\"').replace("'", "\'")
+    prompt_purpose = form.prompt_purpose.data.replace('"', '\"').replace("'", "\'")
+    prompt_notes = form.prompt_notes.data.replace('"', '\"').replace("'", "\'")
+    input_prompt = f"""
+      Write the body of a marketing email from Cymbal Retail that will {prompt_purpose}.
+      The subject of the email should start with \'Subject:\' and the body of the email should start with \'Body:\'.
+      Write it in the tone of {prompt_tone}.
+      Make sure to incude {prompt_notes}
+      """
+    prompt_embed = get_text_embeddings(input_prompt)
+    publish_pubsub(input_prompt, prompt_embed)
+    output = get_response(input_prompt)
+    response = output.text
+    response_embed = get_text_embeddings(response)
+    publish_pubsub(output._prediction_response, response_embed)
+    message=""
+    return redirect(url_for('review', response=response))
   else:
-      message = "Invalid inputs. Try again"
-      return render_template('index.html', form=form, message=message)
+    message = "Invalid inputs. Try again"
+    return render_template('index.html', form=form)
+  # return render_template('index.html', form=form, message=message)
 
-@app.route('/review')
+@app.route('/review/<response>')
 def review(response):
-  if response is not None:
-    return render_template('review.html', response=response)
-  else:
+  if response is None:
     return render_template('500.html'), 500
+  else:
+    x = response.split("Subject:")[1]
+    x = x.split("Body:")
+    email_subject=x[0].strip()
+    email_body=x[1].strip()
+    return render_template('review.html', email_subject=email_subject, email_body=email_body)
 
 # 2 routes to handle common errors
 @app.errorhandler(404)

@@ -6,16 +6,18 @@ from concurrent import futures
 from google.cloud import pubsub_v1
 # from google.cloud import secretmanager
 from typing import Callable
+from google.cloud import aiplatform_v1 as aiplatform
 from vertexai.preview.language_models import TextGenerationModel, TextEmbeddingModel
 
-project_id = "building-on-bq-demos"
+project = "building-on-bq-demos"
 location = "us-central1"
 pubsub_topic_id = "email_marketing_llm"
 
 publisher = pubsub_v1.PublisherClient()
-topic_path = publisher.topic_path(project_id, pubsub_topic_id)
+topic_path = publisher.topic_path(project, pubsub_topic_id)
 
-vertexai.init(project=project_id, location=location)
+vertexai.init(project=project,
+  location=location)
 
 def get_text_embeddings(input):
   model = TextEmbeddingModel.from_pretrained("textembedding-gecko@001")
