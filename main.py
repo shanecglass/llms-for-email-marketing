@@ -45,10 +45,10 @@ def index():
         Make sure to incude {prompt_notes}
         """
       prompt_embed = get_text_embeddings(input_prompt)
-      publish_pubsub(input_prompt, prompt_embed)
+      #publish_pubsub(input_prompt, prompt_embed)
       output = get_response(input_prompt)
       response_embed = get_text_embeddings(output.text)
-      publish_pubsub(output._prediction_response, response_embed)
+      #publish_pubsub(output._prediction_response, response_embed)
       output_text = output.text
       return redirect( url_for('/review.html'), form=form, response=output_text)
   else:
