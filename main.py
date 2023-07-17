@@ -1,6 +1,6 @@
 import secrets
 import requests
-
+import uuid
 
 from crypt import methods
 from flask import Flask, render_template, redirect, url_for
@@ -19,6 +19,7 @@ foo = secrets.token_urlsafe(16)
 app.secret_key = foo
 bootstrap = Bootstrap5(app)
 csrf = CSRFProtect(app)
+session_id = str(uuid.uuid4())
 
 temperature = 0.9
 token_limit = 500
@@ -46,12 +47,13 @@ def index():
       Make sure to incude {prompt_notes}
       """
     prompt_embed = get_text_embeddings(input_prompt)
-    publish_pubsub(input_prompt, prompt_embed)
+    publish_pubsub(session_id, input_prompt, prompt_embed, "prompt")
     output = get_response(input_prompt)
     response = output.text
     response_embed = get_text_embeddings(response)
-    publish_pubsub(output._prediction_response, response_embed)
+    publish_pubsub(session_id, output._prediction_response, response_embed, "response")
     message=""
+
     return redirect(url_for('review', response=response))
   else:
     message = "Invalid inputs. Try again"

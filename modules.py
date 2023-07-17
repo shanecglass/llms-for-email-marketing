@@ -11,10 +11,13 @@ from vertexai.preview.language_models import TextGenerationModel, TextEmbeddingM
 
 project = "building-on-bq-demos"
 location = "us-central1"
-pubsub_topic_id = "email_marketing_llm"
+prompt_pubsub_topic_id = "email_marketing_llm_prompt"
+response_pubsub_topic_id = "email_marketing_llm_response"
 
 publisher = pubsub_v1.PublisherClient()
-topic_path = publisher.topic_path(project, pubsub_topic_id)
+prompt_topic_path = publisher.topic_path(project, prompt_pubsub_topic_id)
+response_topic_path = publisher.topic_path(project, response_pubsub_topic_id)
+
 
 vertexai.init(project=project,
   location=location)
@@ -44,11 +47,19 @@ def get_response(input_prompt):
   print(output.text)
   return output
 
-def publish_pubsub(text, embedding):
-  #"""Text embedding with a Large Language Model."""
-      data_string = json.dumps(f"{text},{embedding}")
-    # Data must be a bytestring
-      data = data_string.encode("utf-8")
-    # When you publish a message, the client returns a future.
-      future = publisher.publish(topic_path, data)
-      print(future.result())
+def publish_pubsub(session, text, text_embedding, purpose):
+  if purpose == "prompt":
+    text_embedding = json.dumps(text_embedding)
+    dict = {"session_id": session, "prompt": text, "embedding": text_embedding}
+    data_string = json.dumps(dict)
+    data = data_string.encode("utf-8")
+    future = publisher.publish(prompt_topic_path, data)
+    return(future)
+  elif purpose == "response":
+    text_embedding = json.dumps(text_embedding)
+    dict = {"session_id": session, "response": text, "embedding": text_embedding}
+    data_string = json.dumps(dict)
+    data = data_string.encode("utf-8")
+    future = publisher.publish(response_topic_path, data)
+    return(future)
+  print(future.result())
