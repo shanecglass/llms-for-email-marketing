@@ -26,7 +26,7 @@ def get_text_embeddings(input):
   model = TextEmbeddingModel.from_pretrained("textembedding-gecko@001")
   try:
     embeddings = model.get_embeddings([input])
-    output = embeddings.values
+    output = [embedding.values for embedding in embeddings]
     return output
   except Exception:
     return [None for _ in range(len(input))]
