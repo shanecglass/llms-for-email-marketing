@@ -51,7 +51,7 @@ def index():
       response_embed = get_text_embeddings(output_text)
       #publish_pubsub(output._prediction_response, response_embed)
       message=""
-      return redirect( url_for('review'), response=output_text)
+      return redirect( url_for('review.html'), response=output_text)
   else:
       message = "Invalid inputs. Try again"
       return render_template('index.html', form=form, message=message)
