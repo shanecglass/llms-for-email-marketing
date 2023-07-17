@@ -47,10 +47,11 @@ def index():
       prompt_embed = get_text_embeddings(input_prompt)
       #publish_pubsub(input_prompt, prompt_embed)
       output = get_response(input_prompt)
-      response_embed = get_text_embeddings(output.text)
-      #publish_pubsub(output._prediction_response, response_embed)
       output_text = output.text
-      return redirect( url_for('review'), form=form, response=output_text)
+      response_embed = get_text_embeddings(output_text)
+      #publish_pubsub(output._prediction_response, response_embed)
+      message=""
+      return redirect( url_for('review'), response=output_text)
   else:
       message = "Invalid inputs. Try again"
       return render_template('index.html', form=form, message=message)
