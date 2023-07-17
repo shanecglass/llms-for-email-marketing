@@ -26,7 +26,7 @@ def get_text_embeddings(input):
   model = TextEmbeddingModel.from_pretrained("textembedding-gecko@001")
   try:
     embeddings = model.get_embeddings([input])
-    output = [embedding.values for embedding in embeddings]
+    output = embeddings.values
     return output
   except Exception:
     return [None for _ in range(len(input))]
@@ -50,7 +50,7 @@ def get_response(input_prompt):
 def publish_pubsub(session, text, text_embedding, purpose):
   if purpose == "prompt":
     text_embedding = json.dumps(text_embedding)
-    dict = {"session_id": session, "prompt": text, "embedding": text_embedding[0]}
+    dict = {"session_id": session, "prompt": text, "embedding": text_embedding}
     data_string = json.dumps(dict)
     data = data_string.encode("utf-8")
     future = publisher.publish(prompt_topic_path, data)
