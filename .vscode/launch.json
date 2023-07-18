@@ -1,0 +1,54 @@
+{
+  "configurations": [
+    {
+      "name": "Cloud Run: Run/Debug Locally",
+      "type": "cloudcode.cloudrun",
+      "request": "launch",
+      "build": {
+        "buildpacks": {
+          "path": "requirements.txt",
+          "builder": "gcr.io/buildpacks/builder:v1"
+        }
+      },
+      "image": "llms-for-email-marketing",
+      "service": {
+        "name": "llms-for-email-marketing",
+        "containerPort": 5000,
+        "resources": {
+          "limits": {
+            "memory": "256Mi"
+          }
+        }
+      },
+      "target": {
+        "minikube": {}
+      },
+      "watch": true
+    },
+    {
+      "name": "Cloud Run: Run/Debug Locally",
+      "type": "cloudcode.cloudrun",
+      "request": "launch",
+      "build": {
+        "buildpacks": {
+          "path": "requirements.txt",
+          "builder": "gcr.io/buildpacks/builder:v1"
+        }
+      },
+      "image": "llms-for-email-marketing",
+      "service": {
+        "name": "llms-for-email-marketing",
+        "containerPort": 5000,
+        "resources": {
+          "limits": {
+            "memory": "256Mi"
+          }
+        }
+      },
+      "target": {
+        "minikube": {}
+      },
+      "watch": true
+    }
+  ]
+}

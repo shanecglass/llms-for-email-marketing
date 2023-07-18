@@ -1,0 +1,11 @@
+PROJ=$(gcloud config get-value project)
+REGION=us-central1
+IMG_TAG="gcr.io/$PROJ/email-marketing-llm"
+
+gcloud run deploy "email-marketing-llm-app"  \
+    --project "$PROJ"     \
+    --image "$IMG_TAG"    \
+    --platform "managed"  \
+    --port 5000           \
+    --region "$REGION"    \
+    --allow-unauthenticated
