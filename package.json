@@ -1,0 +1,6 @@
+{
+  "name": "LLM-Cleaning-Email-Marketing",
+  "dependencies": {
+    "@dataform/core": "2.4.2"
+  }
+}

@@ -1,0 +1,43 @@
+config {
+  type: "table",
+  bigquery: {
+    partitionBy: "TIMESTAMP_TRUNC(publish_time, DAY)",
+    clusterBy: ["session_id"],
+    partitionExpirationDays: 7
+  },
+  columns: {
+    session_id: "A unique identifier for each of the user's sessions",
+    user_prompt: "The full text of the prompt that was generated from user input",
+    prompt_embedding: "STRING representation of the array of the text embeddings computed for the user_prompt using the Vertex AI Gecko text embedding model",
+    publish_time: "The timestamp of when the PubSub message was published. This is roughly equivalent to when the user submitted their request",
+    message_id: "The Pub/Sub message ID",
+    subscription_name: "Name of the Pub/Sub subscription that wrote the data to BigQuery",
+    prompt_embedding_values: "Array representation of the text embeddings computed for the user_prompt using the Vertex AI Gecko text embedding model"
+  }
+}
+
+with parser AS (
+  SELECT
+    PARSE_JSON(data) as data,
+    publish_time,
+    message_id,
+    subscription_name
+  FROM 
+    `building-on-bq-demos.email_marketing_llm_usage.prompts`
+)
+
+,hold AS (
+  SELECT
+  * EXCEPT (data),
+  JSON_VALUE(data.session_id) AS session_id,
+  TRIM(TRIM(JSON_VALUE(data.prompt), "\n")) AS user_prompt,
+  CONCAT("[",TRIM(JSON_VALUE(data.embedding),"[]"),"]") AS embedding,
+  
+FROM 
+  parser
+)
+
+SELECT
+  *, 
+  ARRAY(SELECT * FROM UNNEST(SPLIT(SUBSTR(embedding, 2 , LENGTH(embedding) - 2)))) AS embedding_values
+FROM hold
