@@ -30,7 +30,7 @@ top_k = 40
 class initialInputs(FlaskForm):
   prompt_purpose = TextAreaField('Describe the reason for the email. For example: Offer 15% off a purchase greater than $100 for customers who haven\'t purchased anything in the last 60 days',validators = [DataRequired()])
   prompt_tone = TextAreaField('Describe the tone you want your email content to have. For example: An edgy sporting goods company pretending to be a worried parent. Refer to the customer as \"sport\" and \"champ\"',validators = [DataRequired()])
-  prompt_notes = TextAreaField('What other factors should be considered in this email, such as included discount codes? Example: Include the discount code \"MISSYOU15\", which is good for 15% off any purchase of $100 or more for the next month',validators = [DataRequired()])
+  prompt_notes = TextAreaField('What other factors should be considered in this email, such as included discount codes? Example: Include the discount code \"MISSYOU15\", which is good for 15% off any purchase of $100 or more for the next month')
   submit = SubmitField('Submit')
 
 @app.route('/', methods=['GET', 'POST'])
