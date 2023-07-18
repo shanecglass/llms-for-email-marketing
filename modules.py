@@ -47,19 +47,20 @@ def get_response(input_prompt):
   print(output.text)
   return output
 
-def publish_pubsub(session, text, text_embedding, purpose):
-  if purpose == "prompt":
-    text_embedding = json.dumps(text_embedding)
-    dict = {"session_id": session, "prompt": text, "embedding": text_embedding}
-    data_string = json.dumps(dict)
-    data = data_string.encode("utf-8")
-    future = publisher.publish(prompt_topic_path, data)
-    return(future)
-  elif purpose == "response":
-    text_embedding = json.dumps(text_embedding)
-    dict = {"session_id": session, "response": text, "embedding": text_embedding}
-    data_string = json.dumps(dict)
-    data = data_string.encode("utf-8")
-    future = publisher.publish(response_topic_path, data)
-    return(future)
-  print(future.result())
+def publish_prompt_pubsub(session, prompt, text_embedding):
+  text_embedding = json.dumps(text_embedding)
+  # text = json.dumps(prompt)
+  dict = {"session_id": session, "prompt": prompt, "embedding": text_embedding}
+  data_string = json.dumps(dict)
+  data = data_string.encode("utf-8")
+  future = publisher.publish(prompt_topic_path, data)
+  return(future)
+
+def publish_response_pubsub(session, response_text, safety_attributes, text_embedding):
+  text_embedding = json.dumps(text_embedding)
+  # text = json.dumps(text)
+  dict = {"session_id": session, "response": response_text, "safety_attributes": safety_attributes, "embedding": text_embedding}
+  data_string = json.dumps(dict)
+  data = data_string.encode("utf-8")
+  future = publisher.publish(response_topic_path, data)
+  return(future)
