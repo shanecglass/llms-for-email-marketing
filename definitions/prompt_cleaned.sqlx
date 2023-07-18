@@ -1,43 +1,56 @@
 config {
-  type: "table",
+  type: "incremental",
+  protected: "true",
+  uniqueKey: ["message_id"],
   bigquery: {
     partitionBy: "TIMESTAMP_TRUNC(publish_time, DAY)",
     clusterBy: ["session_id"],
     partitionExpirationDays: 7
   },
+
   columns: {
+    original_message: "Original JSON ingested from Pub/Sub",
+    publish_time: "The timestamp of when the Pub/Sub message was published. This is roughly equivalent to when the user submitted their request",
     session_id: "A unique identifier for each of the user's sessions",
-    user_prompt: "The full text of the prompt that was generated from user input",
-    prompt_embedding: "STRING representation of the array of the text embeddings computed for the user_prompt using the Vertex AI Gecko text embedding model",
-    publish_time: "The timestamp of when the PubSub message was published. This is roughly equivalent to when the user submitted their request",
+    prompt: "The full text of the prompt that was generated from user input",
     message_id: "The Pub/Sub message ID",
     subscription_name: "Name of the Pub/Sub subscription that wrote the data to BigQuery",
-    prompt_embedding_values: "Array representation of the text embeddings computed for the user_prompt using the Vertex AI Gecko text embedding model"
+    attributes: "Pub/Sub message attributes",
+    prompt_embedding: "STRING representation of the array of the text embeddings computed for the prompt using the Vertex AI Gecko text embedding model",
+    prompt_embedding_values: "Array representation of the text embeddings computed for the prompt using the Vertex AI Gecko text embedding model"
   }
 }
-
 with parser AS (
   SELECT
-    PARSE_JSON(data) as data,
-    publish_time,
-    message_id,
-    subscription_name
+    * EXCEPT(data),
+    PARSE_JSON(data, wide_number_mode=>'round') AS data
   FROM 
     `building-on-bq-demos.email_marketing_llm_usage.prompts`
-)
+),
 
-,hold AS (
+cleaning AS (
   SELECT
-  * EXCEPT (data),
-  JSON_VALUE(data.session_id) AS session_id,
-  TRIM(TRIM(JSON_VALUE(data.prompt), "\n")) AS user_prompt,
-  CONCAT("[",TRIM(JSON_VALUE(data.embedding),"[]"),"]") AS embedding,
-  
+    data AS original_message,
+    publish_time,
+    JSON_VALUE(data.session_id) AS session_id,
+    TRIM(JSON_VALUE(data.prompt)) AS prompt,
+    message_id,
+    subscription_name, 
+    attributes,
+    CONCAT("[",TRIM(JSON_VALUE(data.embedding),"[]"),"]") AS prompt_embedding,
 FROM 
   parser
+),
+
+hold AS (
+  SELECT
+    *,
+    ARRAY(SELECT CAST(integer_element AS NUMERIC) FROM UNNEST(JSON_VALUE_ARRAY((prompt_embedding),'$')) AS integer_element) AS prompt_embedding_values
+  FROM
+    cleaning
+  WHERE
+    prompt_embedding IS NOT NULL
 )
 
-SELECT
-  *, 
-  ARRAY(SELECT * FROM UNNEST(SPLIT(SUBSTR(embedding, 2 , LENGTH(embedding) - 2)))) AS embedding_values
-FROM hold
+SELECT * FROM hold
+${ when(incremental(), `WHERE publish_time > (SELECT MAX(publish_time) FROM ${self()})`) }
