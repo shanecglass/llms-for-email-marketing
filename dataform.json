@@ -1,0 +1,8 @@
+{
+  "defaultSchema": "email_marketing_llm_usage",
+  "assertionSchema": "email_marketing_llm_usage_assertions",
+  "warehouse": "bigquery",
+  "defaultDatabase": "building-on-bq-demos",
+  "defaultLocation": "us-central1"
+}
+    
