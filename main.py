@@ -1,3 +1,4 @@
+import json
 import secrets
 import requests
 import uuid
@@ -6,7 +7,7 @@ from crypt import methods
 from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap5
 from flask_wtf import FlaskForm, CSRFProtect
-from modules import get_text_embeddings, get_response, publish_pubsub
+from modules import get_text_embeddings, get_response, publish_prompt_pubsub, publish_response_pubsub
 from random import choices
 from secrets import choice
 from vertexai.preview.language_models import TextGenerationModel, TextEmbeddingModel
@@ -47,14 +48,17 @@ def index():
       Make sure to incude {prompt_notes}
       """
     prompt_embed = get_text_embeddings(input_prompt)
-    publish_pubsub(session_id, input_prompt, prompt_embed, "prompt")
+    publish_prompt_pubsub(session_id, input_prompt, prompt_embed)
     output = get_response(input_prompt)
-    response = output.text
-    response_embed = get_text_embeddings(response)
-    publish_pubsub(session_id, output._prediction_response, response_embed, "response")
+    response_text = output.text.replace("\n"," ").replace("\r", "")
+    safety_attributes = output.safety_attributes
+    # output_dict = {"response": response, "safety_attributes": output.safety_attributes}
+    # pubsub_output = json.dumps(output_dict)
+    response_embed = get_text_embeddings(response_text)
+    publish_response_pubsub(session_id, response_text, safety_attributes, response_embed)
     message=""
 
-    return redirect(url_for('review', response=response))
+    return redirect(url_for('review', response=response_text))
   else:
     message = "Invalid inputs. Try again"
     return render_template('index.html', form=form)
