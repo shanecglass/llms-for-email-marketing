@@ -45,7 +45,8 @@ FROM
 hold AS (
   SELECT
     *,
-    ARRAY(SELECT CAST(integer_element AS NUMERIC) FROM UNNEST(JSON_VALUE_ARRAY((prompt_embedding),'$')) AS integer_element) AS prompt_embedding_values
+    ARRAY(SELECT CAST(integer_element AS NUMERIC) FROM UNNEST(JSON_VALUE_ARRAY((prompt_embedding),'$')) AS integer_element) AS prompt_embedding_values,
+    ROUND(TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), publish_time, MINUTE)/60, 2) AS hours_since_prompt,
   FROM
     cleaning
   WHERE
