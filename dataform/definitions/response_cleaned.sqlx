@@ -1,0 +1,59 @@
+config {
+  type: "incremental",
+  protected: "true",
+  uniqueKey: ["message_id"],
+  bigquery: {
+    partitionBy: "TIMESTAMP_TRUNC(publish_time, DAY)",
+    clusterBy: ["session_id"],
+    partitionExpirationDays: 7
+  },
+
+  columns: {
+    original_message: "Original JSON ingested from Pub/Sub",
+    publish_time: "The timestamp of when the Pub/Sub message was published. This is roughly equivalent to when the user submitted their request",
+    session_id: "A unique identifier for each of the user's sessions",
+    response: "The full text of the response that was generated from user input",
+    safety_attributes: "Safety attributes associated with the response as determined by the model",
+    message_id: "The Pub/Sub message ID",
+    subscription_name: "Name of the Pub/Sub subscription that wrote the data to BigQuery",
+    attributes: "Pub/Sub message attributes",
+    response_embedding: "STRING representation of the array of the text embeddings computed for the response using the Vertex AI Gecko text embedding model",
+    response_embedding_values: "Array representation of the text embeddings computed for the response using the Vertex AI Gecko text embedding model"
+  }
+}
+
+WITH parser AS (
+  SELECT
+    * EXCEPT(data),
+    PARSE_JSON(data, wide_number_mode=>'round') AS data
+  FROM
+    `building-on-bq-demos.email_marketing_llm_usage.responses`
+  ),
+
+cleaning AS (
+SELECT
+  TO_JSON(data) AS original_message,
+  publish_time,
+  JSON_VALUE(data.session_id) AS session_id,
+  JSON_VALUE(data.response) AS response,
+  (data.safety_attributes) AS safety_attributes,
+  message_id,
+  subscription_name,
+  attributes,
+  CONCAT("[",TRIM(JSON_VALUE(data.embedding),"[]"),"]") AS response_embedding,
+FROM
+  parser
+),
+
+hold AS(
+  SELECT
+    *,
+    ARRAY(SELECT CAST(integer_element AS NUMERIC) FROM UNNEST(JSON_VALUE_ARRAY((response_embedding),'$')) AS integer_element) AS response_embeddingg_values
+  FROM
+    cleaning
+  WHERE
+    response_embedding IS NOT NULL
+)
+
+SELECT * FROM hold
+${ when(incremental(), `WHERE publish_time > (SELECT MAX(publish_time) FROM ${self()})`) }
