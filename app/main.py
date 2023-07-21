@@ -1,17 +1,10 @@
-import json
 import secrets
-import requests
 import uuid
 
-from crypt import methods
 from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap5
 from flask_wtf import FlaskForm, CSRFProtect
 from modules import get_text_embeddings, get_response, publish_prompt_pubsub, publish_response_pubsub
-from random import choices
-from secrets import choice
-from vertexai.preview.language_models import TextGenerationModel, TextEmbeddingModel
-from wsgiref import validate
 from wtforms import SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 
@@ -22,21 +15,16 @@ bootstrap = Bootstrap5(app)
 csrf = CSRFProtect(app)
 session_id = str(uuid.uuid4())
 
-temperature = 0.9
-token_limit = 500
-top_p = 0.9
-top_k = 40
-
 class initialInputs(FlaskForm):
   prompt_purpose = TextAreaField('Describe the reason for the email. For example: Offer 15% off a purchase greater than $100 for customers who haven\'t purchased anything in the last 60 days',validators = [DataRequired()])
   prompt_tone = TextAreaField('Describe the tone you want your email content to have. For example: An edgy sporting goods company pretending to be a worried parent. Refer to the customer as \"sport\" and \"champ\"',validators = [DataRequired()])
   prompt_notes = TextAreaField('What other factors should be considered in this email, such as included discount codes? Example: Include the discount code \"MISSYOU15\", which is good for 15% off any purchase of $100 or more for the next month')
   submit = SubmitField('Submit')
 
+#Homepage and where most of the work happens. This also calls the API for text generation and embedding, then publishes them to a Pub/Sub topic before directing users to their response
 @app.route('/', methods=['GET', 'POST'])
 def index():
   form = initialInputs()
-  message = ""
   if form.validate_on_submit():
     prompt_tone = form.prompt_tone.data.replace('"', '\"').replace("'", "\'")
     prompt_purpose = form.prompt_purpose.data.replace('"', '\"').replace("'", "\'")
@@ -52,18 +40,14 @@ def index():
     output = get_response(input_prompt)
     response_text = output.text.replace("\n"," ").replace("\r", "")
     safety_attributes = output.safety_attributes
-    # output_dict = {"response": response, "safety_attributes": output.safety_attributes}
-    # pubsub_output = json.dumps(output_dict)
     response_embed = get_text_embeddings(response_text)
     publish_response_pubsub(session_id, response_text, safety_attributes, response_embed)
-    message=""
-
     return redirect(url_for('review', response=response_text))
   else:
     message = "Invalid inputs. Try again"
     return render_template('index.html', form=form)
-  # return render_template('index.html', form=form, message=message)
 
+#Route users to the model response to view their email
 @app.route('/review/<response>')
 def review(response):
   if response is None:

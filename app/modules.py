@@ -2,24 +2,25 @@
 import json
 import vertexai
 
-from concurrent import futures
 from google.cloud import pubsub_v1
-# from google.cloud import secretmanager
-from typing import Callable
-from google.cloud import aiplatform_v1 as aiplatform
 from vertexai.preview.language_models import TextGenerationModel, TextEmbeddingModel
 
-project = "building-on-bq-demos"
+#Change the values of the 4 lines below to match your requirements
+
+#Project ID
+project_id = "building-on-bq-demos"
+#Pub/Sub Topic ID for prompt
+prompt_pubsub_topic_id = "email_marketing_llm_prompts"
+#Pub/Sub Topic ID for response
+response_pubsub_topic_id = "email_marketing_llm_responses"
+#GCP region
 location = "us-central1"
-prompt_pubsub_topic_id = "email_marketing_llm_prompt"
-response_pubsub_topic_id = "email_marketing_llm_response"
 
 publisher = pubsub_v1.PublisherClient()
-prompt_topic_path = publisher.topic_path(project, prompt_pubsub_topic_id)
-response_topic_path = publisher.topic_path(project, response_pubsub_topic_id)
+prompt_topic_path = publisher.topic_path(project_id, prompt_pubsub_topic_id)
+response_topic_path = publisher.topic_path(project_id, response_pubsub_topic_id)
 
-
-vertexai.init(project=project,
+vertexai.init(project=project_id,
   location=location)
 
 def get_text_embeddings(input):
@@ -33,13 +34,13 @@ def get_text_embeddings(input):
 
 def get_response(input_prompt):
   model = TextGenerationModel.from_pretrained("text-bison@001")
+  #These parameters can be modified to better suit your needs. Check out the documentation to learn more: https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/text#request_body
   parameters = {
     "temperature": 0.9,  # Temperature controls the degree of randomness in token selection.
     "max_output_tokens": 512,  # Token limit determines the maximum amount of text output.
     "top_p": 0.8,  # Tokens are selected from most probable to least until the sum of their probabilities equals the top_p value.
     "top_k": 40,  # A top_k of 1 means the selected token is the most probable among all tokens.
   }
-
   output = model.predict(
     prompt=input_prompt,
     **parameters
@@ -49,7 +50,6 @@ def get_response(input_prompt):
 
 def publish_prompt_pubsub(session, prompt, text_embedding):
   text_embedding = json.dumps(text_embedding)
-  # text = json.dumps(prompt)
   dict = {"session_id": session, "prompt": prompt, "embedding": text_embedding}
   data_string = json.dumps(dict)
   data = data_string.encode("utf-8")
@@ -58,7 +58,6 @@ def publish_prompt_pubsub(session, prompt, text_embedding):
 
 def publish_response_pubsub(session, response_text, safety_attributes, text_embedding):
   text_embedding = json.dumps(text_embedding)
-  # text = json.dumps(text)
   dict = {"session_id": session, "response": response_text, "safety_attributes": safety_attributes, "embedding": text_embedding}
   data_string = json.dumps(dict)
   data = data_string.encode("utf-8")

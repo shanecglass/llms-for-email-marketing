@@ -1,6 +1,7 @@
 PROJ=$(gcloud config get-value project)
 REGION=us-central1
 IMG_TAG="gcr.io/$PROJ/email-marketing-llm"
+SERVICE_ACCOUNT="launch-llm-email-marketing-demo-app@$PROJ.iam.gserviceaccount.com"
 
 gcloud run deploy "email-marketing-llm-app"  \
     --project "$PROJ"     \
@@ -8,4 +9,5 @@ gcloud run deploy "email-marketing-llm-app"  \
     --platform "managed"  \
     --port 5000           \
     --region "$REGION"    \
+    --service-account "$SERVICE_ACCOUNT" \
     --allow-unauthenticated
