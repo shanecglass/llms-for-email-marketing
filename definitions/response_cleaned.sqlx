@@ -18,7 +18,8 @@ config {
     subscription_name: "Name of the Pub/Sub subscription that wrote the data to BigQuery",
     attributes: "Pub/Sub message attributes",
     response_embedding: "STRING representation of the array of the text embeddings computed for the response using the Vertex AI Gecko text embedding model",
-    response_embedding_values: "Array representation of the text embeddings computed for the response using the Vertex AI Gecko text embedding model"
+    response_embedding_values: "Array representation of the text embeddings computed for the response using the Vertex AI Gecko text embedding model",
+    hours_since_response: "Number of hours since response was generated, rounded to 2 decimal places."
   }
 }
 
@@ -48,7 +49,8 @@ FROM
 hold AS(
   SELECT
     *,
-    ARRAY(SELECT CAST(integer_element AS NUMERIC) FROM UNNEST(JSON_VALUE_ARRAY((response_embedding),'$')) AS integer_element) AS response_embeddingg_values
+    ARRAY(SELECT CAST(integer_element AS NUMERIC) FROM UNNEST(JSON_VALUE_ARRAY((response_embedding),'$')) AS integer_element) AS response_embeddingg_values,
+    ROUND(TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), publish_time, MINUTE)/60,2) AS hours_since_prompt,
   FROM
     cleaning
   WHERE
