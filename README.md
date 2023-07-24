@@ -6,11 +6,13 @@ Before you start: Though using a new GCP project for this example is not a requi
 
 ## Setup
 ### 0. Clone this repo in Cloud Shell
-You'll need to clone this repo locally first, then set the working directory to this folder using the following commands.
+#### 1. You'll need to clone this repo locally first, then set the working directory to this folder using the following commands.
 ```
 git clone https://github.com/shanecglass/llms-for-email-marketing.git
 cd llms-for-email-marketing
 ```
+#### 2. Enable the Cloud Resource Manager API
+Check to make sure the [Cloud Resource Manager API](https://console.cloud.google.com/apis/library/cloudresourcemanager.googleapis.com) is enabled
 
 ### 1. Setup your infrastructure
 This app uses Cloud Run, Cloud Build, BigQuery, and PubSub. Run the following to execute the Terraform script to setup everything.
