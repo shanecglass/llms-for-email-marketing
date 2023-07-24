@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-terraform {
-  required_providers {
-    google = {
-      source = "hashicorp/google"
-      version = "4.51.0"
-    }
-  }
-}
-
 module "project-services" {
   source = "./module-project-services"
 }
