@@ -66,28 +66,43 @@ EOF
   depends_on = [google_bigquery_dataset.dest_dataset]
 }
 
-resource "google_bigquery_job" "load_samples" {
+resource "google_bigquery_job" "load_samples_prompts" {
   job_id = "job_load_samples"
   labels = {
     "my_job" ="load"
   }
 
-  dynamic "load" {
-    for_each = var.resource_purpose
-    iterator = purpose
-    content {
-    source_uris = ["${var.sample_data_bucket}${purpose.key}.parquet"]
+  load {
+    source_uris = ["${var.sample_data_bucket}prompts.parquet"]
     destination_table {
       project_id = module.project-services.project_id
       dataset_id = google_bigquery_dataset.dest_dataset.dataset_id
-      table_id   = purpose.key
+      table_id   = "prompts"
     }
     write_disposition     = "WRITE_EMPTY"
     source_format         = "PARQUET"
     autodetect            = false
     }
   }
-}
+
+resource "google_bigquery_job" "load_samples_responses" {
+  job_id = "job_load_samples"
+  labels = {
+    "my_job" ="load"
+  }
+
+  load {
+    source_uris = ["${var.sample_data_bucket}responses.parquet"]
+    destination_table {
+      project_id = module.project-services.project_id
+      dataset_id = google_bigquery_dataset.dest_dataset.dataset_id
+      table_id   = "responses"
+    }
+    write_disposition     = "WRITE_EMPTY"
+    source_format         = "PARQUET"
+    autodetect            = false
+    }
+  }
 
 resource "google_dataform_repository" "cleaning_repo" {
   provider = google-beta
