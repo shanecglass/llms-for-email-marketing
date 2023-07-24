@@ -15,9 +15,23 @@
  */
 
 module "project-services" {
-  source          = "./module-project-services"
-  project_id      = var.project_id
-  enable_apis     = var.enable_apis
+  source                      = "terraform-google-modules/project-factory/google//modules/project_services"
+  version                     = "~> 14.2"
+  project_id  = var.project_id
+  enable_apis = var.enable_apis
+  activate_apis = [
+    "aiplatform.googleapis.com",
+    "bigquery.googleapis.com",
+    "cloudapis.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "cloudrun.googleapis.com",
+    "config.googleapis.com",
+    "dataform.googleapis.com",
+    "iam.googleapis.com",
+    "logging.googleapis.com",
+    "pubsub.googleapis.com",
+    "workflows.googleapis.com",
+  ]
 }
 
 resource "time_sleep" "wait_after_apis_activate" {
