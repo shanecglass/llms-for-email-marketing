@@ -30,6 +30,7 @@ module "project-services" {
     "iam.googleapis.com",
     "logging.googleapis.com",
     "pubsub.googleapis.com",
+    "serviceusage.googleapis.com",
     "workflows.googleapis.com",
   ]
 }
