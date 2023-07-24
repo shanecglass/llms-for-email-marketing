@@ -49,7 +49,7 @@ resource "google_project_service_identity" "cloud_run" {
 
 resource "google_service_account" "cloud_run_invoke" {
   project      = module.project-services.project_id
-  account_id   = "launch-llm-email-marketing-demo-app"
+  account_id   = "demo-app"
   display_name = "Cloud Run Auth Service Account"
 }
 
@@ -59,7 +59,6 @@ resource "google_project_iam_member" "cloud_run_invoke_roles" {
     "roles/run.invoker",                    // Service account role to manage access to app
     "roles/aiplatform.user",                // Needs to predict from endpoints
     "roles/aiplatform.serviceAgent",        // Service account role
-
     ]
   )
 
@@ -77,12 +76,12 @@ resource "time_sleep" "wait_after_all_resources" {
   depends_on = [
     module.project-services,
     google_project_iam_member.cloud_run_invoke_roles,
-    google_bigquery_dataset.google_bigquery_dataset.dest_dataset,
-    google_bigquery_dataset.google_bigquery_table.dest_tables,
+    google_bigquery_dataset.dest_dataset,
+    google_bigquery_table.dest_tables,
     google_bigquery_job.load_samples,
     dataform_respository.google_dataform_repository.cleaning_repo,
-    google_bigquery_dataset.google_bigquery_table.cleaned_prompts,
-    google_bigquery_dataset.google_bigquery_table.cleaned_responses,
+    google_bigquery_table.cleaned_prompts,
+    google_bigquery_table.cleaned_responses,
     module.pubsub,
 
   ]

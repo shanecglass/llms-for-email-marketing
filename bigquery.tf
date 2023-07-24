@@ -81,10 +81,10 @@ resource "google_bigquery_job" "load_samples" {
         dataset_id = google_bigquery_dataset.dest_dataset.dataset_id
         table_id   = each.key
       }
-    }
     write_disposition     = "WRITE_EMPTY"
     source_format         = "PARQUET"
     autodetect            = false
+    }
   }
   depends_on = [google_bigquery_dataset.dest_tables]
 
