@@ -18,8 +18,12 @@ Replace the value in line 11 of `modules.py` with your GCP project ID. You may a
 project_id = "building-on-bq-demos"
 ```
 
-1. Make bld and deploy files executable
-You may need to make the files executable:
+1. Change work directory and make bld and deploy files executable
+If you just deployed the app infrastructure using Terraform, you'll need to change working directories:
+```
+cd ./app
+```
+You will then need to make the files executable:
 ```
 chmod +x bld
 chmod +x deploy

@@ -9,7 +9,7 @@ Before you start: Though using a new GCP project for this example is not a requi
 You'll need to clone this repo locally first, then set the working directory to this folder using the following commands.
 ```
 git clone https://github.com/shanecglass/llms-for-email-marketing.git
-cd llms-for-email-marketing/app
+cd llms-for-email-marketing
 ```
 
 1. Setup your infrastructure
