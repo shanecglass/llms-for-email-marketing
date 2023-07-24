@@ -87,7 +87,7 @@ resource "google_bigquery_job" "load_samples" {
     autodetect            = false
     }
   }
-# }
+}
 
 resource "google_dataform_repository" "cleaning_repo" {
   provider = google-beta
