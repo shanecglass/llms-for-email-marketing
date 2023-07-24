@@ -74,19 +74,19 @@ resource "google_bigquery_job" "load_samples" {
 
   dynamic "load" {
     for_each = var.resource_purpose
-    content {
-      source_uris = ["${var.sample_data_bucket}${each.key}.parquet"]
-      destination_table {
-        project_id = module.project-services.project_id
-        dataset_id = google_bigquery_dataset.dest_dataset.dataset_id
-        table_id   = each.key
-      }
+    # content {
+    source_uris = "${var.sample_data_bucket}${each.key}.parquet"
+    destination_table {
+      project_id = module.project-services.project_id
+      dataset_id = google_bigquery_dataset.dest_dataset.dataset_id
+      table_id   = each.key
+    }
     write_disposition     = "WRITE_EMPTY"
     source_format         = "PARQUET"
     autodetect            = false
     }
   }
-}
+# }
 
 resource "google_dataform_repository" "cleaning_repo" {
   provider = google-beta
