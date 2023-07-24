@@ -17,6 +17,7 @@
 module "project-services" {
   source          = "./module-project-services"
   project_id      = var.project_id
+  enable_apis     = var.enable_apis
 }
 
 resource "time_sleep" "wait_after_apis_activate" {
