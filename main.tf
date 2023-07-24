@@ -24,6 +24,7 @@ module "project-services" {
     "bigquery.googleapis.com",
     "cloudapis.googleapis.com",
     "cloudbuild.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
     "cloudrun.googleapis.com",
     "config.googleapis.com",
     "dataform.googleapis.com",
