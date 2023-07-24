@@ -79,7 +79,7 @@ resource "time_sleep" "wait_after_all_resources" {
     google_bigquery_dataset.dest_dataset,
     google_bigquery_table.dest_tables,
     google_bigquery_job.load_samples,
-    dataform_respository.google_dataform_repository.cleaning_repo,
+    google_dataform_repository.cleaning_repo,
     google_bigquery_table.cleaned_prompts,
     google_bigquery_table.cleaned_responses,
     module.pubsub,
