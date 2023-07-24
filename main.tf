@@ -17,8 +17,8 @@
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
   version                     = "~> 14.2"
-  project_id  = var.project_id
-  enable_apis = var.enable_apis
+  project_id                  = var.project_id
+  enable_apis                 = var.enable_apis
   activate_apis = [
     "aiplatform.googleapis.com",
     "bigquery.googleapis.com",
