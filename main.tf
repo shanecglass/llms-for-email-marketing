@@ -25,7 +25,7 @@ module "project-services" {
     "cloudapis.googleapis.com",
     "cloudbuild.googleapis.com",
     "cloudresourcemanager.googleapis.com",
-    "cloudrun.googleapis.com",
+    "run.googleapis.com",
     "config.googleapis.com",
     "dataform.googleapis.com",
     "iam.googleapis.com",
