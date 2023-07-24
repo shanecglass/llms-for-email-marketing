@@ -23,7 +23,6 @@
 variable "project_id" {
   type        = string
   description = "Google Cloud Project ID"
-  default =  null
 }
 
 #Update with your preferred region. Please consider the carbon footprint of your workload when choosing a region: https://cloud.google.com/sustainability/region-carbon#data
