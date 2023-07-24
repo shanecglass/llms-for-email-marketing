@@ -20,7 +20,7 @@ module "pubsub" {
 
   for_each            = toset(var.pubsub_purposes)
   topic               = "email_marketing_app_demo_llm_${each.key}"
-  project             = module.project-services.project_id
+  project_id          = module.project-services.project_id
 
   bigquery_subscriptions = [
     {
