@@ -73,7 +73,7 @@ resource "google_bigquery_job" "load_samples" {
   }
 
   dynamic "load" {
-    for_each = toset(var.resource_purpose)
+    for_each = var.resource_purpose
     content {
       source_uris = ["${var.sample_data_bucket}${each.key}.parquet"]
       destination_table {
