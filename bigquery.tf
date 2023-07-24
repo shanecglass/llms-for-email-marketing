@@ -84,10 +84,9 @@ resource "google_bigquery_job" "load_samples" {
     write_disposition     = "WRITE_EMPTY"
     source_format         = "PARQUET"
     autodetect            = false
+
     }
   }
-  depends_on = [google_bigquery_dataset.dest_tables]
-
 }
 
 resource "google_dataform_repository" "cleaning_repo" {
