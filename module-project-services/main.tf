@@ -16,11 +16,10 @@
 
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
-  version                     = "14.2.1"
-  disable_services_on_destroy = false
+  version                     = "~> 14.2"
 
-  project_id  = var.project_id
-  enable_apis = var.enable_apis
+  project_id                  = var.project_id
+  enable_apis                 = var.enable_apis
 
   activate_apis = [
     "aiplatform.googleapis.com",
@@ -34,59 +33,5 @@ module "project-services" {
     "logging.googleapis.com",
     "pubsub.googleapis.com",
     "workflows.googleapis.com",
-  ]
-  activate_api_identities = [{
-    api = "aiplatform.googleapis.com"
-    roles = [
-      "roles/aiplatform.user",                  // Needs to predict from endpoints
-      "roles/aiplatform.serviceAgent",          // Service account role
-      ]
-    },
-    {
-      api = "bigquery.googleapis.com"
-      roles = [
-        "roles/bigquery.dataOwner",             // Needs to create datasets, create tables, update tables, set IAM policy
-        "roles/bigquery.jobUser",               // Needs to create and run jobs, create models
-      ]
-    },
-    {
-      api = "cloudbuild.googleapis.com"
-      roles = [
-        "roles/cloudbuild.builds.editor",       // Needs to create and update builds, list projects, and delete builds
-        "roles/cloudbuild.builds.builder",      // Service account role
-      ]
-    },
-    {
-      api = "cloudrun.googleapis.com"
-      roles = [
-        "roles/run.admin",                      //Needs to deploy, invoke, and set IAM policy
-        "roles/run.invoker",                    //Service account role
-      ]
-    },
-    {
-      api = "dataform.googleapis.com"
-      roles = [
-        "roles/dataform.admin",                 //Needs to create repos; create, commit, and invoke workspaces; Set IAM policy for workspaces and repos; Pull files; Invoke workflows
-      ]
-    },
-    {
-      api = "logging.googleapis.com"
-      roles = [
-        "roles/logging.logWriter",              //Needs to write log entries
-      ]
-    },
-    {
-      api = "pubsub.googleapis.com"
-      roles = [
-        "roles/pubsub.editor",                  //Needs to create and modify topics/subscriptions, publish and consume messages
-        "roles/pubsub.publisher",               // Cloud Run invoker needs to publish Pub/Sub messages to topic
-      ]
-    },
-    {
-      api = "workflows.googleapis.com"
-      roles = [
-        "roles/workflows.editor",                //Needs to create and invoke workflows
-      ]
-    },
   ]
 }
