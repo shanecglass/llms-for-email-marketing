@@ -107,7 +107,6 @@ resource "terraform_data" "bld_and_deploy"{
     environment = {
       PROJ  = module.project-services.project_id
       REGION = var.region
-      DOCKER_PATH = "${path.root}/app/Dockerfile"
     }
   }
 }
