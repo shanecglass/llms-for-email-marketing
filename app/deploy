@@ -1,7 +1,7 @@
 PROJ=$(gcloud config get-value project)
 REGION=us-central1
 IMG_TAG="gcr.io/$PROJ/email-marketing-llm"
-SERVICE_ACCOUNT="launch-llm-email-marketing-demo-app@$PROJ.iam.gserviceaccount.com"
+SERVICE_ACCOUNT="demo-app@$PROJ.iam.gserviceaccount.com"
 
 gcloud run deploy "email-marketing-llm-app"  \
     --project "$PROJ"     \
