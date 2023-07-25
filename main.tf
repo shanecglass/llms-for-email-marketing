@@ -25,7 +25,6 @@ module "project-services" {
     "cloudapis.googleapis.com",
     "cloudbuild.googleapis.com",
     "cloudresourcemanager.googleapis.com",
-    "cloudrun.googleapis.com",
     "config.googleapis.com",
     "dataform.googleapis.com",
     "iam.googleapis.com",
@@ -45,7 +44,7 @@ resource "time_sleep" "wait_after_apis_activate" {
 resource "google_project_service_identity" "cloud_run" {
   provider = google-beta
   project  = module.project-services.project_id
-  service  = "cloudrun.googleapis.com"
+  service  = "run.googleapis.com"
 
   depends_on = [time_sleep.wait_after_apis_activate]
 }
