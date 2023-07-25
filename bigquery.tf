@@ -102,11 +102,15 @@ resource "google_bigquery_job" "load_samples_responses" {
     source_format         = "PARQUET"
     autodetect            = false
     }
+
+    depends_on = [google_bigquery_table.dest_dataset, google_bigquery_table.dest_tables]
   }
 
 resource "google_dataform_repository" "cleaning_repo" {
   provider = google-beta
   name = "LLM-Cleaning-Email-Marketing-Demo"
+  region = var.region
+  project = module.project-services.project_id
 
   workspace_compilation_overrides {
     default_database = module.project-services.project_id
