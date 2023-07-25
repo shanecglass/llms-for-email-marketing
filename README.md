@@ -89,7 +89,7 @@ The Terraform output also lists the following additional information that you'll
 
 ## Deploy the app
 ### 2. **Deploy the app**
-The [app](./app) folder contains the necessary resources and instructions to deploy the app to [Cloud Run](https://cloud.google.com/run) to get started
+The [app](./app/README.md) folder contains the necessary resources and instructions to deploy the app to [Cloud Run](https://cloud.google.com/run) to get started
 
 
 ## Setup your analysis workspace
