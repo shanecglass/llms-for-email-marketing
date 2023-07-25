@@ -93,6 +93,7 @@ resource "time_sleep" "wait_after_all_resources" {
   ]
 }
 
+resource "terraform_data" "bld_and_deploy"{
   provisioner "local-exec" {
     command     = <<-EOT
       chmod +x ./bld.sh
@@ -108,3 +109,4 @@ resource "time_sleep" "wait_after_all_resources" {
       REGION = var.region
     }
   }
+}
