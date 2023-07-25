@@ -53,6 +53,7 @@ resource "google_service_account" "cloud_run_invoke" {
   project      = module.project-services.project_id
   account_id   = "demo-app"
   display_name = "Cloud Run Auth Service Account"
+  depends_on = [google_project_service_identity.cloud_run]
 }
 
 resource "google_project_iam_member" "cloud_run_invoke_roles" {
