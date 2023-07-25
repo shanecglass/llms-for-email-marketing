@@ -76,7 +76,7 @@ resource "google_project_iam_member" "cloud_run_invoke_roles" {
     "roles/run.invoker",                    // Service account role to manage access to app
     "roles/aiplatform.user",                // Needs to predict from endpoints
     "roles/aiplatform.serviceAgent",        // Service account role
-    "roles/iam.serviceaccounts.actAs"
+    "roles/iam.serviceAccountUser"
     ]
   )
 
