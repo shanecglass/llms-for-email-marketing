@@ -114,7 +114,7 @@ resource "google_dataform_repository" "cleaning_repo" {
   provider = google-beta
   name = "LLM-Cleaning-Email-Marketing-Demo"
   region = var.region
-  project_id = module.project-services.project_id
+  project = module.project-services.project_id
 
   workspace_compilation_overrides {
     default_database = module.project-services.project_id
