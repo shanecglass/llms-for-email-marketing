@@ -100,8 +100,8 @@ resource "terraform_data" "bld_and_deploy"{
       cd "${path.root}/app"
       chmod +x bld.sh
       chmod +x deploy.sh
-      bld.sh
-      deploy.sh
+      bash bld.sh
+      bash deploy.sh
     EOT
 
     environment = {
