@@ -38,7 +38,7 @@ module "project-services" {
 
 resource "time_sleep" "wait_after_apis_activate" {
   depends_on      = [module.project-services]
-  create_duration = "60s"
+  create_duration = "120s"
 }
 
 resource "google_project_service_identity" "cloud_run" {
@@ -53,7 +53,7 @@ resource "google_service_account" "cloud_run_invoke" {
   project      = module.project-services.project_id
   account_id   = "demo-app"
   display_name = "Cloud Run Auth Service Account"
-  depends_on = [google_project_service_identity.cloud_run]
+  depends_on = [google_project_service_identity.cloud_run, time_sleep.wait_after_apis_activate]
 }
 
 resource "google_project_iam_member" "cloud_run_invoke_roles" {
