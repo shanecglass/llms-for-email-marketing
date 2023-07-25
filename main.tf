@@ -31,7 +31,6 @@ module "project-services" {
     "logging.googleapis.com",
     "pubsub.googleapis.com",
     "run.googleapis.com",
-    "serviceusage.googleapis.com",
     "workflows.googleapis.com",
   ]
 }

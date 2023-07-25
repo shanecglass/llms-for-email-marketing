@@ -67,7 +67,8 @@ EOF
 }
 
 resource "google_bigquery_job" "load_samples_prompts" {
-  job_id = "job_load_samples"
+  job_id     = "job_load_samples"
+  location   = var.region
   labels = {
     "my_job" ="load"
   }
@@ -89,6 +90,7 @@ resource "google_bigquery_job" "load_samples_prompts" {
 
 resource "google_bigquery_job" "load_samples_responses" {
   job_id = "job_load_samples"
+  location   = var.region
   labels = {
     "my_job" ="load"
   }
