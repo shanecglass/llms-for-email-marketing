@@ -14,6 +14,19 @@
  * limitations under the License.
  */
 
+resource "google_project_service" "serviceusage" {
+  project = var.project_id
+  service = "serviceusage.googleapis.com"
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "serviceusage" {
+  project = var.project_id
+  service = "iam.googleapis.com"
+  disable_dependent_services = true
+}
+
+
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
   version                     = "~> 14.2"
@@ -35,6 +48,7 @@ module "project-services" {
     "workflows.googleapis.com",
   ]
 }
+
 
 resource "time_sleep" "wait_after_apis_activate" {
   depends_on      = [module.project-services]
