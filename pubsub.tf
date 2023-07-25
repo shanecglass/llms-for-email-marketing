@@ -19,7 +19,7 @@ module "pubsub" {
   version             = "~> 5.0"
 
   for_each            = toset(var.resource_purpose)
-  topic               = "email_marketing_app_demo_llm_${each.key}"
+  topic               = "email_marketing_llm_${each.key}"
   project_id          = module.project-services.project_id
 
   bigquery_subscriptions = [
