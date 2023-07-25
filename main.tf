@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-resource "google_project_service" "serviceusage" {
-  project = var.project_id
-  service = "serviceusage.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "iam" {
-  project = var.project_id
-  service = "iam.googleapis.com"
-  disable_dependent_services = true
-}
-
-
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
   version                     = "~> 14.2"
@@ -105,3 +92,19 @@ resource "time_sleep" "wait_after_all_resources" {
 
   ]
 }
+
+  provisioner "local-exec" {
+    command     = <<-EOT
+      chmod +x ./bld.sh
+      chmod +x ./deploy.sh
+      ./bld.sh
+      ./deploy.sh
+    EOT
+    interpreter = ["/bin/bash"]
+    working_dir = "./app"
+
+    environment = {
+      PROJ  = module.project-services.project_id
+      REGION = var.region
+    }
+  }

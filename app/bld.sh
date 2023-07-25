@@ -1,2 +1,3 @@
-PROJ=$(gcloud config get-value project)
+PROJ=${PROJ}
+REGION=${REGION}
 gcloud builds submit --tag "gcr.io/$PROJ/email-marketing-llm"

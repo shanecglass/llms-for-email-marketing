@@ -1,5 +1,6 @@
 # This file will get executed when the function is executed
 import json
+import os
 import vertexai
 
 from google.cloud import pubsub_v1
@@ -8,13 +9,13 @@ from vertexai.preview.language_models import TextGenerationModel, TextEmbeddingM
 #Change the values of the 4 lines below to match your requirements
 
 #Project ID
-project_id = "building-on-bq-demos"
+project_id = os.environ['PROJ']
 #Pub/Sub Topic ID for prompt
 prompt_pubsub_topic_id = "email_marketing_llm_prompts"
 #Pub/Sub Topic ID for response
 response_pubsub_topic_id = "email_marketing_llm_responses"
 #GCP region
-location = "us-central1"
+location = os.environ['REGION']
 
 publisher = pubsub_v1.PublisherClient()
 prompt_topic_path = publisher.topic_path(project_id, prompt_pubsub_topic_id)

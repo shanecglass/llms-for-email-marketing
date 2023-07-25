@@ -12,12 +12,6 @@ This is a first step to implementing full lineage and governance for workloads t
 ### Instructions to deploy to Cloud Run
 Head to the Google Cloud Console and use [Cloud Shell](https://cloud.google.com/shell) to run the following steps. This can also be run in your local terminal if you have the [Cloud SDK installed and configured](https://cloud.google.com/sdk/docs/install)
 
-0. Modify the `project_id` variable in the `modules.py` file:
-Replace the value in line 11 of `modules.py` with your GCP project ID. You may also need to update the Pub/Sub topic IDs if you created topics with a different name
-```
-project_id = "building-on-bq-demos"
-```
-
 1. Change work directory and make bld and deploy files executable
 If you just deployed the app infrastructure using Terraform, you'll need to change working directories:
 ```

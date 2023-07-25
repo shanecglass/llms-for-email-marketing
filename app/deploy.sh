@@ -1,5 +1,5 @@
-PROJ=$(gcloud config get-value project)
-REGION=us-central1
+PROJ=${PROJ}
+REGION=${REGION}
 IMG_TAG="gcr.io/$PROJ/email-marketing-llm"
 SERVICE_ACCOUNT="demo-app@$PROJ.iam.gserviceaccount.com"
 
