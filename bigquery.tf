@@ -103,7 +103,7 @@ resource "google_bigquery_job" "load_samples_responses" {
     autodetect            = false
     }
 
-    depends_on = [google_bigquery_table.dest_dataset, google_bigquery_table.dest_tables]
+    depends_on = [google_bigquery_dataset.dest_dataset, google_bigquery_table.dest_tables]
   }
 
 resource "google_dataform_repository" "cleaning_repo" {
