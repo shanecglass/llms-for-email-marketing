@@ -20,7 +20,7 @@ resource "google_project_service" "serviceusage" {
   disable_dependent_services = true
 }
 
-resource "google_project_service" "serviceusage" {
+resource "google_project_service" "iam" {
   project = var.project_id
   service = "iam.googleapis.com"
   disable_dependent_services = true
