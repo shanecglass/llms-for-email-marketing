@@ -95,13 +95,13 @@ resource "time_sleep" "wait_after_all_resources" {
 
 resource "terraform_data" "bld_and_deploy"{
   provisioner "local-exec" {
+    interpreter = ["bash", "-c"]
     command     = <<-EOT
-      chmod +x ./app/bld.sh
-      chmod +x ./app/deploy.sh
-      ./app/bld.sh
-      ./app/deploy.sh
+      chmod +x "${path.root}/app/bld.sh"
+      chmod +x "${path.root}/app/deploy.sh"
+      "${path.root}/app/bld.sh"
+      "${path.root}/app/deploy.sh"
     EOT
-    interpreter = ["/bin/bash"]
 
     environment = {
       PROJ  = module.project-services.project_id
