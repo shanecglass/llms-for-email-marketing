@@ -6,7 +6,7 @@ SERVICE_ACCOUNT="demo-app@$PROJ.iam.gserviceaccount.com"
 gcloud run deploy "email-marketing-llm-app"  \
     --project "$PROJ"                \
     --image "$IMG_TAG"               \
-    --update-env-vars PROJ=$PROJ     \
+    --update-env-vars PROJ=$PROJ, REGION=$REGION     \
     --platform "managed"             \
     --port 5000                      \
     --region "$REGION"               \
