@@ -97,10 +97,11 @@ resource "terraform_data" "bld_and_deploy"{
   provisioner "local-exec" {
     interpreter = ["bash", "-c"]
     command     = <<-EOT
-      chmod +x "${path.root}/app/bld.sh"
-      chmod +x "${path.root}/app/deploy.sh"
-      "${path.root}/app/bld.sh"
-      "${path.root}/app/deploy.sh"
+      cd "${path.root}/app"
+      chmod +x bld.sh
+      chmod +x deploy.sh
+      bld.sh
+      deploy.sh
     EOT
 
     environment = {
