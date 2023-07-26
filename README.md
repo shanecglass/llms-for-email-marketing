@@ -100,7 +100,7 @@ The Terraform output also lists the following additional information that you'll
 Create and initialize your Dataform workspace. Then copy and paste the [Dataform queries](./definitions) found in `prompt_cleaned.sqlx` and `response_cleaned.sqlx`, then start the workflow execution for all actions. These will incrementally clean and write the data to analysis-ready tables.
 
 ### 3. **Create your BQML model**
-From the BigQuery console SQL Workspace, run the [`CREATE MODEL`](./create_kmeans_model.sql) to create the BQML model.
+From the BigQuery console SQL Workspace, run the [`CREATE MODEL`](./create_kmeans_model.sql) query to create the BQML model.
 
-### 4. **Analyze your model!**
-From here, you can get started analyzing the data and the results of the BQML model. Check out [this blog post](https://towardsdatascience.com/how-to-use-k-means-clustering-in-bigquery-ml-to-understand-and-describe-your-data-better-c972c6f5733b) to learn more about how you can get started with K-Means clustering in BQML
+### 4. **Analyze your model and optimize your business!**
+From here, you can get started analyzing the data and the results of the BQML model. Check out [this blog post](https://towardsdatascience.com/how-to-use-k-means-clustering-in-bigquery-ml-to-understand-and-describe-your-data-better-c972c6f5733b) to learn more about how you can get started with K-Means clustering in BQML. Training a clustering model helps you automatically come up with the clusters or categories of questions/prompts that the end-users are asking, so that you can learn from how your users are using your product and take actions to cater your business. In this example, it helps you identify similar requests for email marketing support, but this demo can be adapted to support a customer-facing chat bot as well. In that case, BigQueury Machine Learning makes it simple to build a k-means clustering model that can help you better understand the types of products customers are asking a chatbot for and better align your product offerings & inventory to match that demand!

@@ -18,7 +18,7 @@ resource "google_bigquery_dataset" "dest_dataset" {
   project             = module.project-services.project_id
   dataset_id          = var.bq_dataset
   location            = var.region
-  depends_on = [ module.project-services]
+  depends_on          = [ time_sleep.wait_after_apis_activate]
 }
 
 resource "google_bigquery_table" "dest_tables" {
@@ -78,14 +78,14 @@ resource "google_bigquery_job" "load_samples_prompts" {
     destination_table {
       project_id = module.project-services.project_id
       dataset_id = google_bigquery_dataset.dest_dataset.dataset_id
-      table_id   = "prompts"
+      table_id   = google_bigquery_table.dest_tables.table_id[0]
     }
     write_disposition     = "WRITE_EMPTY"
     source_format         = "PARQUET"
     autodetect            = false
     }
 
-    depends_on = [ google_bigquery_dataset.dest_dataset , google_bigquery_table.dest_tables ]
+    depends_on = [ google_bigquery_table.dest_tables ]
   }
 
 resource "google_bigquery_job" "load_samples_responses" {
