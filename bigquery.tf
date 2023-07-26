@@ -78,7 +78,7 @@ resource "google_bigquery_job" "load_samples_prompts" {
     destination_table {
       project_id = module.project-services.project_id
       dataset_id = google_bigquery_dataset.dest_dataset.dataset_id
-      table_id   = var.resource_purpose[0]
+      table_id   = "prompts"
     }
     write_disposition     = "WRITE_EMPTY"
     source_format         = "PARQUET"
