@@ -14,8 +14,9 @@ Before you start: Though using a new GCP project for this example is not a requi
 
 ## Setup
 ### 0. Clone this repo in Cloud Shell
-#### 1. You'll need to clone this repo locally first, then set the working directory to this folder using the following commands.
+#### 1. You'll need to set your Google Cloud project in Cloud Shell, clone this repo locally first, and set the working directory to this folder using the following commands.
 ```
+gcloud config set project <PROJECT ID>
 git clone https://github.com/shanecglass/llms-for-email-marketing.git
 cd llms-for-email-marketing
 ```
