@@ -109,4 +109,5 @@ resource "terraform_data" "bld_and_deploy"{
       REGION = var.region
     }
   }
+  depends_on = [time_sleep.wait_after_apis_activate]
 }
