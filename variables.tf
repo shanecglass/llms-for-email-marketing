@@ -32,6 +32,7 @@ variable "region" {
   default     = "us-central1"
 }
 
+
 variable "bq_dataset" {
   type        = string
   description = "BigQuery dataset ID"

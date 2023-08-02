@@ -18,7 +18,8 @@ Terraform can be used to scalably manage infrastructure for deployments, specifi
 # Deploying the app
 ## Setup
 **Note** \
-Before you start: Though using a new GCP project for this example is not a requirement, it might be easiest to use a new GCP project for this. This makes cleanup much easier, as you can delete the whole project to ensure all assets are removed and it ensures no potential conflicts with existing resources. You can also remove resources by running `terraform destroy` after you deploy the resources
+Before you start: Though it's not a requirement, using a new GCP project for this demo is easiest. This makes cleanup much easier, as you can delete the whole project to ensure all assets are removed and it ensures no potential conflicts with existing resources. You can also remove resources by running `terraform destroy` after you deploy the resources, but it will miss some of the resources deployed by Terraform.
+
 ### 0. Clone this repo in Cloud Shell
 #### 1. You'll need to set your Google Cloud project in Cloud Shell, clone this repo locally first, and set the working directory to this folder using the following commands.
 ```

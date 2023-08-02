@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#Activate APIs for the project
 module "project-services" {
   source                      = "terraform-google-modules/project-factory/google//modules/project_services"
   version                     = "~> 14.2"
@@ -36,12 +37,13 @@ module "project-services" {
   ]
 }
 
-
+#Pause after API activation
 resource "time_sleep" "wait_after_apis_activate" {
   depends_on      = [module.project-services]
   create_duration = "120s"
 }
 
+#Identify the default service identity for Cloud Run
 resource "google_project_service_identity" "cloud_run" {
   provider = google-beta
   project  = module.project-services.project_id
@@ -50,6 +52,7 @@ resource "google_project_service_identity" "cloud_run" {
   depends_on = [time_sleep.wait_after_apis_activate]
 }
 
+#Create a service account for Cloud Run authorization
 resource "google_service_account" "cloud_run_invoke" {
   project      = module.project-services.project_id
   account_id   = "demo-app"
@@ -57,6 +60,7 @@ resource "google_service_account" "cloud_run_invoke" {
   depends_on = [google_project_service_identity.cloud_run, time_sleep.wait_after_apis_activate]
 }
 
+#Assign IAM permissions to the Cloud Run authorization service account
 resource "google_project_iam_member" "cloud_run_invoke_roles" {
   for_each = toset([
     "roles/pubsub.publisher",               // Needs to publish Pub/Sub messages to topic
@@ -76,8 +80,9 @@ resource "google_project_iam_member" "cloud_run_invoke_roles" {
   ]
 }
 
+#Pause after creation of all resources
 resource "time_sleep" "wait_after_all_resources" {
-  create_duration = "120s"
+  create_duration = "60s"
   depends_on = [
     module.project-services,
     google_project_iam_member.cloud_run_invoke_roles,

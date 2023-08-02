@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
+#URL of the Dataform repository used to clean raw prompt/response data
 output "dataform_repo_url" {
   value       = "https://console.cloud.google.com/bigquery/dataform/locations/us-central1/repositories/LLM-Cleaning-Email-Marketing/details/workspaces?project=${var.project_id}"
   description = "The URL to launch the Dataform UI for the repo created"
 }
 
+#URL of the BigQuery editor for this project
 output "bigquery_editor_url" {
   value       = "https://console.cloud.google.com/bigquery?project=${var.project_id}"
   description = "The URL to launch the BigQuery editor"

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#Create destination dataset for prompt and response tables
 resource "google_bigquery_dataset" "dest_dataset" {
   project             = module.project-services.project_id
   dataset_id          = var.bq_dataset
@@ -21,6 +22,7 @@ resource "google_bigquery_dataset" "dest_dataset" {
   depends_on          = [ time_sleep.wait_after_apis_activate]
 }
 
+#Create landing table for raw prompt and response inputs
 resource "google_bigquery_table" "dest_tables" {
   for_each            = toset(var.resource_purpose)
   project             = module.project-services.project_id
@@ -62,10 +64,10 @@ resource "google_bigquery_table" "dest_tables" {
   }
 ]
 EOF
-
   depends_on = [google_bigquery_dataset.dest_dataset]
 }
 
+#Load sample of raw prompt data from GCS
 resource "google_bigquery_job" "load_samples_prompts" {
   job_id     = "load_samples_prompts"
   location   = var.region
@@ -88,6 +90,7 @@ resource "google_bigquery_job" "load_samples_prompts" {
     depends_on = [ google_bigquery_table.dest_tables ]
   }
 
+#Load sample of raw response data from GCS
 resource "google_bigquery_job" "load_samples_responses" {
   job_id = "load_samples_responses"
   location   = var.region
@@ -121,6 +124,7 @@ resource "google_dataform_repository" "cleaning_repo" {
   }
 }
 
+#Create BigQuery table for cleaned prompts
 resource "google_bigquery_table" "cleaned_prompts" {
   project             = module.project-services.project_id
   dataset_id          = google_bigquery_dataset.dest_dataset.dataset_id
@@ -184,6 +188,7 @@ resource "google_bigquery_table" "cleaned_prompts" {
   EOF
 }
 
+#Create BigQuery table for cleaned responses
 resource "google_bigquery_table" "cleaned_responses" {
   project             = module.project-services.project_id
   dataset_id          = google_bigquery_dataset.dest_dataset.dataset_id

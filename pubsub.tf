@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#Create Pub/Sub topics to capture both prompts and responses
+#This module also creates the subscription that writes the raw prompts/response data to the appropriate BigQuery table
 module "pubsub" {
   source              = "terraform-google-modules/pubsub/google"
   version             = "~> 5.0"
