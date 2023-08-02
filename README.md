@@ -1,18 +1,24 @@
 # Marketing email generator - LLM usage & lineage demo
 ## Overview
 This repo provides an example LLM app to generate marketing emails to demonstrate how you can establish prompt lineage and response lineage around LLM usage. The following instructions should help you get started. It is intended to demonstration:
-1. **How you can enable non-technical users (in this case, email marketing professionals) to use LLMs**
+1. **How you can enable non-technical users (in this case, email marketing professionals) to use LLMs** \
 This app puts a user interface over some of Google Cloud's LLMs APIs for text generation that makes it easier for non-technical users to benefit from LLMs
-2. **Provide some boundaries around how LLMs are used within your company while still leveraging the expertise of users**
+2. **Provide some boundaries around how LLMs are used within your company while still leveraging the expertise of users** \
 This app has a narrowly defined use case: Generating marketing emails. This is accomplished by providing a place for user input that is part of the prompt while still providing structure around what the prompt will produce by telling it to write a marketing email. This provides some boundaries around the use case rather than giving users a "blank canvas" that allows them to generate content for an unsupported use case.
-3. **Begin to implement "prompt & response lineage" by capturing the prompt and response (along with associated metadata) to a Pub/Sub topic**
+3. **Begin to implement "prompt & response lineage" by capturing the prompt and response (along with associated metadata) to a Pub/Sub topic** \
 This is a first step to implementing full lineage and governance for workloads that use LLMs. The Pub/Sub topics used in this app write to BigQuery, allowing you to analyze LLM usage over time.
-4. **How Terraform can be used to support simplified infrastructure deployments**
+4. **How Terraform can be used to support simplified infrastructure deployments** \
+Terraform can be used to scalably manage infrastructure for deployments, specifically for repeatable tasks such as launching LLM apps with varying use cases.
 
+# Architecture Diagram
+<p align="center">
+  <img src="./architecture-diagram.png" alt="Architecture Diagram" width=800px>
+</p>
+
+# Deploying the app
+## Setup
 **Note** \
 Before you start: Though using a new GCP project for this example is not a requirement, it might be easiest to use a new GCP project for this. This makes cleanup much easier, as you can delete the whole project to ensure all assets are removed and it ensures no potential conflicts with existing resources. You can also remove resources by running `terraform destroy` after you deploy the resources
-
-## Setup
 ### 0. Clone this repo in Cloud Shell
 #### 1. You'll need to set your Google Cloud project in Cloud Shell, clone this repo locally first, and set the working directory to this folder using the following commands.
 ```
@@ -104,4 +110,6 @@ Create and initialize your Dataform workspace. Then copy and paste the [Dataform
 From the BigQuery console SQL Workspace, run the [`CREATE MODEL`](./create_kmeans_model.sql) query to create the BQML model.
 
 ### 4. **Analyze your model and optimize your business!**
-From here, you can get started analyzing the data and the results of the BQML model. Check out [this blog post](https://towardsdatascience.com/how-to-use-k-means-clustering-in-bigquery-ml-to-understand-and-describe-your-data-better-c972c6f5733b) to learn more about how you can get started with K-Means clustering in BQML. Training a clustering model helps you automatically come up with the clusters or categories of questions/prompts that the end-users are asking, so that you can learn from how your users are using your product and take actions to cater your business. In this example, it helps you identify similar requests for email marketing support, but this demo can be adapted to support a customer-facing chat bot as well. In that case, BigQueury Machine Learning makes it simple to build a k-means clustering model that can help you better understand the types of products customers are asking a chatbot for and better align your product offerings & inventory to match that demand!
+From here, you can get started analyzing the data and the results of the BQML model. Check out [this blog post](https://towardsdatascience.com/how-to-use-k-means-clustering-in-bigquery-ml-to-understand-and-describe-your-data-better-c972c6f5733b) to learn more about how you can get started with K-Means clustering in BQML.
+
+Training a clustering model helps you identify similar questions/prompts that the end-users are asking, so that you can learn from how your users are using your product and take actions to cater your business. In this example, it helps you identify similar requests for email marketing support, but this demo can be adapted to support a customer-facing chat bot as well. In that case, BigQuery Machine Learning makes it simple to build a k-means clustering model that can help you better understand the types of products customers are asking a chatbot about. This understanding of customer intent would allow you to better align your product offerings & inventory to match that demand!
